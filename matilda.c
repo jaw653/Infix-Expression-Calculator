@@ -39,7 +39,7 @@ static int priorityOf(char c);
 /***** Public functions *****/
 void populateBST(FILE *, BST *);              //Sends only key/val pairs to bst
 void printInput(QUEUE *);                     //Prints out input (-i option)
-void convertToPostfix(QUEUE *);
+QUEUE *convertToPostfix(QUEUE *);
 QUEUE *getLastLine(QUEUE *);                  //Returns queue containing last line
 int processPostFix(QUEUE *queue, BST *tree);  //Calculate final postfix number
 void displayPair(FILE *, void *, void *);
@@ -96,7 +96,13 @@ int main(int argc, char *argv[]) {
       readInFile(fp, queue);
 
       QUEUE *lastLine = getLastLine(queue);
-      convertToPostfix(lastLine);
+      QUEUE *postFixExpr = convertToPostfix(lastLine);
+
+      while (sizeQUEUE(postFixExpr) > 0) {
+        displaySTRING(stdout, dequeue(postFixExpr));
+        printf(" ");
+      }
+      printf("\n");
 
       if (fp != NULL) fclose(fp);
     }
@@ -143,7 +149,6 @@ void populateBST(FILE *fp, BST *tree) {
       double db = (double) i;
       REAL *value = newREAL(db);
 
-      printf("inserting...\n");
       insertBST(tree, key, value);
     }
 
@@ -191,8 +196,10 @@ static int priorityOf(char c) {
   return -1;
 }
 
-void convertToPostfix(QUEUE *queue) {
+QUEUE *convertToPostfix(QUEUE *queue) {
   STACK *stack = newSTACK(displaySTRING);
+  QUEUE *postFixQueue = newQUEUE(displaySTRING);
+
   char *s;
   char c;
 
@@ -206,7 +213,8 @@ void convertToPostfix(QUEUE *queue) {
       if (sizeSTACK(stack) > 0) {
         char topStack = *getSTRING(peekSTACK(stack));
         while (topStack != '(') {
-          printf("%c ", topStack);
+          enqueue(postFixQueue, peekSTACK(stack));
+          //printf("%c ", topStack);
           if (sizeSTACK(stack) == 0) break;
           pop(stack);
           topStack = *getSTRING(peekSTACK(stack));
@@ -218,7 +226,8 @@ void convertToPostfix(QUEUE *queue) {
       if (sizeSTACK(stack) > 0) {
         char topStack = *getSTRING(peekSTACK(stack));
         while (priorityOf(c) <= priorityOf(topStack) && topStack != '(') {
-          printf("%c ", topStack);
+          enqueue(postFixQueue, peekSTACK(stack));
+          //printf("%c ", topStack);
           pop(stack);
           if (sizeSTACK(stack) == 0) break;
           topStack = *getSTRING(peekSTACK(stack));
@@ -230,12 +239,14 @@ void convertToPostfix(QUEUE *queue) {
   }
 
   while (sizeSTACK(stack) > 0) {
-    char topStack = *getSTRING(peekSTACK(stack));
-    printf("%c ", topStack);
+    //char topStack = *getSTRING(peekSTACK(stack));
+    enqueue(postFixQueue, peekSTACK(stack));
+    //printf("%c ", topStack);
     pop(stack);
   }
 
-  printf("\n");
+  //printf("\n");
+  return postFixQueue;
 }
 
 QUEUE *getLastLine(QUEUE *queue) {
