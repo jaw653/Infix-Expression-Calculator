@@ -48,7 +48,7 @@ queue.o: queue.c queue.h
 	gcc $(OPTS) -c queue.c
 
 clean:
-	rm -rf *.o $(TESTEXES)
+	rm -rf *.o $(TESTEXES) runBSTtest
 
 #******************************************************************************#
 # *** TEST OBJECTS *** #
