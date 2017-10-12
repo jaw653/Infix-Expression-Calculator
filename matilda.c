@@ -13,6 +13,7 @@
 //Question: going to need to get all the way to last line before doing the postfix conversion
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
@@ -25,17 +26,27 @@
 #include "real.h"
 #include "scanner.h"
 
+/*
+ * Notes:
+ *       When you're inserting values into BST, you need to input the value as a real...
+ *
+ */
+
 /***** Private functions *****/
 static void readInFile(FILE *, QUEUE *);    //Reads in file to queue
 static int priorityOf(char c);
 
 /***** Public functions *****/
-//void runBOpts(FILE *);                    //Prints binary search tree
-void printInput(QUEUE *);                     //Prints out input
-//void runPOpts(FILE *, STACK *);           //Converts infix to postfix
+void populateBST(FILE *, BST *);              //Sends only key/val pairs to bst
+void printInput(QUEUE *);                     //Prints out input (-i option)
 void convertToPostfix(QUEUE *);
-QUEUE *getLastLine(QUEUE *);
+QUEUE *getLastLine(QUEUE *);                  //Returns queue containing last line
+int processPostFix(QUEUE *queue, BST *tree);  //Calculate final postfix number
+void displayPair(FILE *, void *, void *);
 
+/******************************************************************************/
+/*                                ---MAIN---                                  */
+/******************************************************************************/
 int main(int argc, char *argv[]) {
   /* If any of the commands are -v, print and exit */
   int i;
@@ -43,8 +54,17 @@ int main(int argc, char *argv[]) {
     if (strcmp(argv[i], "-v") == 0) { printf("Jake Wachs\n"); return 0; }
   }
 
+
   /* If matilda comes w/ no arguments (filenames or opts) */
   if (argc == 1) { return 0; }
+
+  char *name = argv[argc - 1];
+  FILE *fp1 = fopen(name, "r");
+
+  BST *tree = newBST(displayPair, compareSTRING);
+  populateBST(fp1, tree);
+
+  if (fp1 != NULL) fclose(fp1);
 
   /* Else run through and complete all command line opts */
   for (i = 0; i < argc; i++) {
@@ -54,7 +74,7 @@ int main(int argc, char *argv[]) {
 
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
-//      runBOpts(fp);
+      //displayBST();
 
       if (fp != NULL) fclose(fp);
     }
@@ -82,9 +102,13 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  //still need to matildize
+  /* Calculate final postfix number and print it */
+  //processPostFix(queue, tree);
+
   return 0;
 }
+/******************************************************************************/
+/******************************************************************************/
 
 /*************** Private functions ***************/
 static void readInFile(FILE *fp, QUEUE *queue) {
@@ -105,8 +129,32 @@ void runBOpts(BST *tree) {
 }
 */
 
+void populateBST(FILE *fp, BST *tree) {
+  char *str = readToken(fp);
+  while (str) {
+    if (strcmp(str, "var") == 0) {
+      char *s = readToken(fp);
+      STRING *key = newSTRING(s);
+
+      readToken(fp);
+
+      char *x = readToken(fp);
+      int i = atoi(x);
+      double db = (double) i;
+      REAL *value = newREAL(db);
+
+      printf("inserting...\n");
+      insertBST(tree, key, value);
+    }
+
+    str = readToken(fp);
+  }
+//  printf("displaying tree:\n");
+//  displayBST(fp, tree);
+}
+
 void printInput(QUEUE *queue) {
-  //print each token in the queue, printing newlines after ';';'
+  //print each token in the queue, printing newlines after ';'
   int i;
   int size = sizeQUEUE(queue);
   for (i = 0; i < size; i++) {
@@ -196,7 +244,6 @@ QUEUE *getLastLine(QUEUE *queue) {
   QUEUE *lastLine = newQUEUE(displaySTRING);
 
   while (sizeQUEUE(queue) > 0) {
-  //  printf("pushing: %s\n", getSTRING(peekQUEUE(queue))  );
     push(fullStack, dequeue(queue));
   }
 
@@ -215,4 +262,14 @@ QUEUE *getLastLine(QUEUE *queue) {
   }
 
   return lastLine;
+}
+
+int processPostFix(QUEUE *queue, BST *tree) {
+  //calculate the final answer of the postfix expression using the bst when need be
+}
+
+void displayPair(FILE *fp, void *key, void *value) {
+  displaySTRING(fp, key);
+  fprintf(fp, "=");
+  displayREAL(fp, value);
 }

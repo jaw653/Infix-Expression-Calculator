@@ -71,6 +71,25 @@ static void *findBSTHelper(struct node *root, BST *tree, void *key) {
 }
 
 static void printInOrderTree(FILE *fp, struct node *root, void (*display)(FILE *, void *, void *)) {
+  printf("output tree\n");
+  if (root->left) {
+    printInOrderTree(fp, root->left, display);
+    fprintf(fp, " ");
+  }
+
+  fprintf(fp, "[");
+  display(fp, root->key, root->value);
+  fprintf(fp, "]");
+
+  if (root->right) {
+    printInOrderTree(fp, root->right, display);
+    fprintf(fp, " ");
+  }
+
+
+
+/*******************************************************************/
+/*
   if (root == NULL) { return; }
 
   printInOrderTree(fp, root->left, display);
@@ -80,6 +99,8 @@ static void printInOrderTree(FILE *fp, struct node *root, void (*display)(FILE *
   fprintf(fp, "]");
 
   printInOrderTree(fp, root->right, display);
+*/
+/*******************************************************************/
 }
 
 

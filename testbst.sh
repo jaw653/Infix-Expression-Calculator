@@ -3,6 +3,6 @@
 
 make
 
-gcc -Wall -Wextra -std=c99 bst.c string.o scanner.o -o runBSTtest
+gcc -Wall -Wextra -std=c99 testBST.c bst.o string.o scanner.o -o runBSTtest
 
 ./runBSTtest
