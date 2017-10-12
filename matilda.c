@@ -27,13 +27,14 @@
 
 /***** Private functions *****/
 static void readInFile(FILE *, QUEUE *);    //Reads in file to queue
+static int priorityOf(char c);
 
 /***** Public functions *****/
 //void runBOpts(FILE *);                    //Prints binary search tree
 void printInput(QUEUE *);                     //Prints out input
 //void runPOpts(FILE *, STACK *);           //Converts infix to postfix
-int priorityOf(char c);
 void convertToPostfix(QUEUE *);
+QUEUE *getLastLine(QUEUE *);
 
 int main(int argc, char *argv[]) {
   /* If any of the commands are -v, print and exit */
@@ -42,34 +43,46 @@ int main(int argc, char *argv[]) {
     if (strcmp(argv[i], "-v") == 0) { printf("Jake Wachs\n"); return 0; }
   }
 
-  /* Open file */
-  char *filename = argv[argc - 1];
-  FILE *fp = fopen(filename, "r");
-
   /* If matilda comes w/ no arguments (filenames or opts) */
   if (argc == 1) { return 0; }
 
   /* Else run through and complete all command line opts */
   for (i = 0; i < argc; i++) {
     if (strcmp(argv[i], "-b") == 0) {
+      char *filename = argv[argc - 1];
+      FILE *fp = fopen(filename, "r");
+
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
 //      runBOpts(fp);
+
+      if (fp != NULL) fclose(fp);
     }
     else if (strcmp(argv[i], "-i") == 0) {
+      char *filename = argv[argc - 1];
+      FILE *fp = fopen(filename, "r");
+
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
       printInput(queue);
+
+      if (fp != NULL) fclose(fp);
     }
     else if (strcmp(argv[i], "-p") == 0) {
+      char *filename = argv[argc - 1];
+      FILE *fp = fopen(filename, "r");
+
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
-      convertToPostfix(queue);
+
+      QUEUE *lastLine = getLastLine(queue);
+      convertToPostfix(lastLine);
+
+      if (fp != NULL) fclose(fp);
     }
   }
 
-  if (fp != NULL) fclose(fp);
-
+  //still need to matildize
   return 0;
 }
 
@@ -113,7 +126,7 @@ void printInput(QUEUE *queue) {
 //  printf("\n");
 }
 
-int priorityOf(char c) {
+static int priorityOf(char c) {
   switch (c) {
     case '+':
     case '-':
@@ -175,4 +188,31 @@ void convertToPostfix(QUEUE *queue) {
   }
 
   printf("\n");
+}
+
+QUEUE *getLastLine(QUEUE *queue) {
+  STACK *fullStack = newSTACK(displaySTRING);
+  STACK *smallStack = newSTACK(displaySTRING);
+  QUEUE *lastLine = newQUEUE(displaySTRING);
+
+  while (sizeQUEUE(queue) > 0) {
+  //  printf("pushing: %s\n", getSTRING(peekQUEUE(queue))  );
+    push(fullStack, dequeue(queue));
+  }
+
+  pop(fullStack);
+
+  while (sizeSTACK(fullStack) > 0) {
+    char *s = getSTRING(peekSTACK(fullStack));
+    char c = *s;
+    if (c == ';') break;
+    push(smallStack, pop(fullStack));
+  }
+
+  while (sizeSTACK(smallStack) > 0) {
+    if (sizeSTACK(smallStack) == 0) break;
+    enqueue(lastLine, pop(smallStack));
+  }
+
+  return lastLine;
 }
