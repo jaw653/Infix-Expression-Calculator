@@ -132,7 +132,6 @@ int priorityOf(char c) {
 
 void convertToPostfix(QUEUE *queue) {
   STACK *stack = newSTACK(displaySTRING);
-  char x;
   char *s;
   char c;
 
@@ -144,23 +143,24 @@ void convertToPostfix(QUEUE *queue) {
     else if (c == '(') { push(stack, newSTRING(s)); }
     else if (c == ')') {
       if (sizeSTACK(stack) > 0) {
-        char s1 = *getSTRING(peekSTACK(stack));
-        while (s1 != '(') {
-          x = *getSTRING(pop(stack));
-          if (x != '(' && x != ')') printf("%c ", x);
+        char topStack = *getSTRING(peekSTACK(stack));
+        while (topStack != '(') {
+          printf("%c ", topStack);
           if (sizeSTACK(stack) == 0) break;
-          s1 = *getSTRING(peekSTACK(stack));
+          pop(stack);
+          topStack = *getSTRING(peekSTACK(stack));
         }
+        pop(stack);
       }
     }
     else {
       if (sizeSTACK(stack) > 0) {
-        char s1 = *getSTRING(peekSTACK(stack));
-        while (priorityOf(c) <= priorityOf(s1)) {
-          x = *getSTRING(pop(stack));
-          printf("%c ", x);
+        char topStack = *getSTRING(peekSTACK(stack));
+        while (priorityOf(c) <= priorityOf(topStack) && topStack != '(') {
+          printf("%c ", topStack);
+          pop(stack);
           if (sizeSTACK(stack) == 0) break;
-          s1 = *getSTRING(peekSTACK(stack));
+          topStack = *getSTRING(peekSTACK(stack));
         }
       }
       push(stack, newSTRING(s));
@@ -169,7 +169,10 @@ void convertToPostfix(QUEUE *queue) {
   }
 
   while (sizeSTACK(stack) > 0) {
-    x = *getSTRING(pop(stack));
-    if (x != '(' && x != ')') printf("%c ", x);
+    char topStack = *getSTRING(peekSTACK(stack));
+    printf("%c ", topStack);
+    pop(stack);
   }
+
+  printf("\n");
 }
