@@ -41,8 +41,9 @@ void populateBST(FILE *, BST *);              //Sends only key/val pairs to bst
 void printInput(QUEUE *);                     //Prints out input (-i option)
 QUEUE *convertToPostfix(QUEUE *);
 QUEUE *getLastLine(QUEUE *);                  //Returns queue containing last line
-int processPostFix(QUEUE *queue, BST *tree);  //Calculate final postfix number
+char *processPostFix(QUEUE *queue, BST *tree);  //Calculate final postfix number
 void displayPair(FILE *, void *, void *);
+STRING *evaluate(double, double, char);
 
 /******************************************************************************/
 /*                                ---MAIN---                                  */
@@ -108,8 +109,18 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  char *file1 = argv[argc - 1];
+  FILE *fptr = fopen(file1, "r");
+
+  QUEUE *queue2 = newQUEUE(displaySTRING);
+  readInFile(fptr, queue2);
+
+  QUEUE *finalLine = getLastLine(queue2);
+  QUEUE *postExpr = convertToPostfix(finalLine);
+
   /* Calculate final postfix number and print it */
-  //processPostFix(queue, tree);
+  char *finalVal = processPostFix(postExpr, tree);
+  printf("\n%s\n", finalVal);
 
   return 0;
 }
@@ -207,7 +218,7 @@ QUEUE *convertToPostfix(QUEUE *queue) {
     s = getSTRING(dequeue(queue));
     c = *s;
 
-    if (isalnum(c)) printf("%c ", c);
+    if (isalnum(c)) enqueue(postFixQueue, newSTRING(s));
     else if (c == '(') { push(stack, newSTRING(s)); }
     else if (c == ')') {
       if (sizeSTACK(stack) > 0) {
@@ -275,12 +286,104 @@ QUEUE *getLastLine(QUEUE *queue) {
   return lastLine;
 }
 
-int processPostFix(QUEUE *queue, BST *tree) {
+char *processPostFix(QUEUE *queue, BST *tree) {
+  STACK *stack = newSTACK(displaySTRING);
+
+  char *elem1;
+  char *elem2;
+  char c1, c2;
+  double value1, value2;
   //calculate the final answer of the postfix expression using the bst when need be
+  //if number or variable, push to stack
+  //if operator, pop 2 elements and evaluate. then push the result
+
+
+
+  while (sizeQUEUE(queue) > 0) {
+    char *str = getSTRING(peekQUEUE(queue));
+    char c = *str;
+
+    if (isalnum(c)) push(stack, dequeue(queue));
+    else {
+      if (sizeSTACK(stack) > 0) {
+        elem1 = getSTRING(pop(stack));
+        c1 = *elem1;
+        if (isalpha(c1)) {
+          //find the value of c in the bst and set = to value
+          REAL *r = findBST(tree, newSTRING(elem1));
+          value1 = getREAL(r);
+        }
+        else {
+          value1 = (double)atoi(elem1);
+        }
+      }
+      if (sizeSTACK(stack) > 0) {
+        elem2 = getSTRING(pop(stack));
+        c2 = *elem2;
+        if (isalpha(c2)) {
+          //find the value of c2 key in bst and set = to value
+          REAL *r = findBST(tree, newSTRING(elem2));
+          value2 = getREAL(r);
+
+        }
+        else {
+          value2 = (double)atoi(elem2);
+        }
+      }
+      //evaluate a x b. then push that value to the stack as a string
+      //printf("val1 is %lf, val2 is %lf, and operator is %c\n", value1, value2, c);
+      push(stack, evaluate(value1, value2, c));
+      dequeue(queue);
+    }
+  }
+
+  /* Pop and print the final value */
+//  printf("%s\n", getSTRING(pop(stack)));
+
+  /* Pop and return final value */
+  return getSTRING(pop(stack));
+
+
 }
 
 void displayPair(FILE *fp, void *key, void *value) {
   displaySTRING(fp, key);
   fprintf(fp, "=");
   displayREAL(fp, value);
+}
+
+STRING *evaluate(double a, double b, char c) {
+  double val, pwr;
+  int i;
+  char *str = malloc(sizeof(char *));
+
+  switch (c) {
+    case '+':
+      val = b + a;
+      break;
+    case '-':
+      val = b - a;
+      break;
+    case '*':
+      val = b * a;
+      break;
+    case '/':
+      val = b / a;
+      break;
+//    case '%':
+//      val = (int)b % (int)a;
+//      break;
+    case '^':
+      pwr = b;
+      for (i = 0; i < a; i++) {
+        b *= pwr;
+      }
+      val = b;
+      break;
+  }
+
+  sprintf(str, "%lf", val);
+  STRING *s = newSTRING(str);
+
+  return s;
 }
