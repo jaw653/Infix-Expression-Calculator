@@ -17,14 +17,14 @@ int main(void) {
   printf("Tree successfully initialized.\n");
 
   printf("Attempting to insert into BST...\n");
-  insertBST(tree, newSTRING("a"), newSTRING("10"));
-  insertBST(tree, newSTRING("b"), newSTRING("20"));
+  insertBST(tree, newSTRING("h"), newSTRING("80"));
+  insertBST(tree, newSTRING("f"), newSTRING("60"));
   insertBST(tree, newSTRING("c"), newSTRING("30"));
   insertBST(tree, newSTRING("d"), newSTRING("40"));
-  insertBST(tree, newSTRING("e"), newSTRING("50"));
-  insertBST(tree, newSTRING("f"), newSTRING("60"));
+  insertBST(tree, newSTRING("a"), newSTRING("10"));
+  insertBST(tree, newSTRING("b"), newSTRING("20"));
   insertBST(tree, newSTRING("g"), newSTRING("70"));
-  insertBST(tree, newSTRING("h"), newSTRING("80"));
+  insertBST(tree, newSTRING("e"), newSTRING("50"));
 
   printf("Insert was successful.\n");
 

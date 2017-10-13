@@ -40,7 +40,7 @@ struct BST {
 static void *insertBSTHelper(struct node *root, BST *tree, void *key, void *value) {
     if (root == NULL) {
       assert(sizeof(struct node));
-      
+
       root = (struct node *)malloc(sizeof(struct node));
       root->key = key;
       root->value = value;
@@ -72,20 +72,51 @@ static void *findBSTHelper(struct node *root, BST *tree, void *key) {
   }
 }
 
-static void printInOrderTree(FILE *fp, struct node *root, void (*display)(FILE *, void *, void *)) {
-  //printf("output tree\n");
-  if (root->left) {
-    fprintf(fp, root->left);
-    fprintf(fp, " ");
+static void printInOrderTree(FILE *fp, struct node *root, BST *tree) {
+  if (tree->size == 0) {
+    printf("[]");
+    return;
   }
+  else {
+    if (root->left) {
+      printf("[");
+      tree->display(fp, root->left->key, root->left->value);
+      printf("] ");
+      //printInOrderTree(fp, root->left, tree);
+    }
 
-  fprintf(fp, "[");
-  display(fp, root->key, root->value);
-  fprintf(fp, "]");
+    printInOrderTree(fp, root->left, tree);
 
-  if (root->right) {
+    if (root->right) {
+      printf("[");
+      tree->display(fp, root->right->key, root->right->value);
+      printf("]");
+    }
+
+/*
+  //  display(fp, root->key, root->value);
+    if (root->left) {
+      printf("[");
+    }
+
+    printInOrderTree(fp, root->left, display);
+
+    if (root->left) {
+      printf("] ");
+    }
+
+    display(fp, root->key, root->value);
+
+    if (root->right) {
+      printf(" [");
+    }
+
     printInOrderTree(fp, root->right, display);
-    fprintf(fp, " ");
+
+    if (root->right) {
+      printf("]");
+    }
+*/
   }
 
 
@@ -134,5 +165,5 @@ int sizeBST(BST *tree) {
 }
 
 void displayBST(FILE *fp, BST *tree) {
-  printInOrderTree(fp, tree->root, tree->display);
+  printInOrderTree(fp, tree->root, tree);
 }
