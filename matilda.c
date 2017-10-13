@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
 
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
-      //displayBST();
+      displayBST(stdout, tree);
 
       if (fp != NULL) fclose(fp);
     }
@@ -153,14 +153,14 @@ void populateBST(FILE *fp, BST *tree) {
     if (strcmp(str, "var") == 0) {
       char *s = readToken(fp);
       STRING *key = newSTRING(s);
-
+printf("key is: %s\n", getSTRING(key));
       readToken(fp);
 
       char *x = readToken(fp);
       int i = atoi(x);
       double db = (double) i;
       REAL *value = newREAL(db);
-
+printf("value is: %lf\n", getREAL(value));
       insertBST(tree, key, value);
     }
 
