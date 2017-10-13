@@ -121,8 +121,27 @@ int main(int argc, char *argv[]) {
   QUEUE *postExpr = convertToPostfix(finalLine);
 
   /* Calculate final postfix number and print it */
-  char *finalVal = processPostFix(postExpr, tree);
-  printf("%s\n", finalVal);
+  if (sizeQUEUE(postExpr) > 1) {
+    char *finalVal = processPostFix(postExpr, tree);
+    printf("%s\n", finalVal);
+  }
+  else {
+    char *string = getSTRING(peekQUEUE(postExpr));
+    char chr = *string;
+    if (isalpha(chr)) {
+      REAL *r = findBST(tree, newSTRING(string));
+      if (r == NULL) {
+        printf("variable %s was not declared\n", string);
+        return 0;
+      }
+      displayREAL(stdout, r);
+      printf("\n");
+    }
+    else {
+      displaySTRING(stdout, newSTRING(string));
+      printf("\n");
+    }
+  }
 
   return 0;
 }
@@ -298,6 +317,10 @@ char *processPostFix(QUEUE *queue, BST *tree) {
         if (isalpha(c1)) {
           /* find the value of c in the bst and set = to value */
           REAL *r = findBST(tree, newSTRING(elem1));
+          if (r == NULL) {
+            printf("variable %s was not declared\n", elem1);
+            exit(0);
+          }
           value1 = getREAL(r);
         }
         else {
@@ -311,6 +334,10 @@ char *processPostFix(QUEUE *queue, BST *tree) {
         if (isalpha(c2)) {
           /* find the value of c2 key in bst and set = to value */
           REAL *r = findBST(tree, newSTRING(elem2));
+          if (r == NULL) {
+            printf("variable %s was not declared\n", elem2);
+            exit(0);
+          }
           value2 = getREAL(r);
 
         }

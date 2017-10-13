@@ -62,6 +62,7 @@ static void *insertBSTHelper(struct node *root, BST *tree, void *key, void *valu
 static void *findBSTHelper(struct node *root, BST *tree, void *key) {
   /* Value found */
   if (root == NULL || tree->comparator(key, root->key) == 0) {
+    if (root == NULL) return NULL;
     return root->value;
   }
   else if (tree->comparator(key, root->key) < 0) {
