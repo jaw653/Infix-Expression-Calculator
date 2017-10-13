@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
   char *name = argv[argc - 1];
   FILE *fp1 = fopen(name, "r");
 
+  /* Initialize new BST and populate it with all key/value pairs */
   BST *tree = newBST(displayPair, compareSTRING);
   populateBST(fp1, tree);
 
@@ -140,34 +141,25 @@ static void readInFile(FILE *fp, QUEUE *queue) {
 }
 
 /*************** Public functions **************/
-/*
-void runBOpts(BST *tree) {
-//  print binary search tree (should be as simple as using displayBST)
-
-}
-*/
-
 void populateBST(FILE *fp, BST *tree) {
   char *str = readToken(fp);
   while (str) {
     if (strcmp(str, "var") == 0) {
       char *s = readToken(fp);
       STRING *key = newSTRING(s);
-printf("key is: %s\n", getSTRING(key));
+
       readToken(fp);
 
       char *x = readToken(fp);
       int i = atoi(x);
       double db = (double) i;
       REAL *value = newREAL(db);
-printf("value is: %lf\n", getREAL(value));
+
       insertBST(tree, key, value);
     }
 
     str = readToken(fp);
   }
-//  printf("displaying tree:\n");
-//  displayBST(fp, tree);
 }
 
 void printInput(QUEUE *queue) {
