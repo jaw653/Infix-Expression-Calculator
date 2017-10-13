@@ -17,6 +17,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <math.h>
 
 #include "stack.h"
 #include "bst.h"
@@ -193,16 +194,17 @@ void printInput(QUEUE *queue) {
 static int priorityOf(char c) {
   switch (c) {
     case '+':
-    case '-':
       return 1;
-    case '*':
-    case '/':
+    case '-':
       return 2;
-
-    case '%':
+    case '*':
       return 3;
-    case '^':
+    case '/':
       return 4;
+    case '%':
+      return 5;
+    case '^':
+      return 6;
   }
   return -1;
 }
@@ -353,8 +355,7 @@ void displayPair(FILE *fp, void *key, void *value) {
 }
 
 STRING *evaluate(double a, double b, char c) {
-  double val, pwr;
-  int i;
+  double val;
   char *str = malloc(sizeof(char *));
 
   switch (c) {
@@ -370,15 +371,11 @@ STRING *evaluate(double a, double b, char c) {
     case '/':
       val = b / a;
       break;
-//    case '%':
-//      val = (int)b % (int)a;
-//      break;
+    case '%':
+      val = fmod(b, a);
+      break;
     case '^':
-      pwr = b;
-      for (i = 0; i < a; i++) {
-        b *= pwr;
-      }
-      val = b;
+      val = pow(b, a);
       break;
   }
 

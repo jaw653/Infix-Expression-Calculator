@@ -15,7 +15,7 @@ test: $(TYPE_OBJS) $(UTIL_OBJS) $(STRUCT_OBJS) matilda.o $(TESTOBJS)
 	#./test executables below
 
 matilda.o: matilda.c $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS)
-	gcc $(OPTS) matilda.c $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS) -o matilda
+	gcc $(OPTS) matilda.c -lm $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS) -o matilda
 
 bst.o: bst.c bst.h
 	gcc $(OPTS) -c bst.c
