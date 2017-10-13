@@ -120,7 +120,7 @@ int main(int argc, char *argv[]) {
 
   /* Calculate final postfix number and print it */
   char *finalVal = processPostFix(postExpr, tree);
-  printf("\n%s\n", finalVal);
+  printf("%s\n", finalVal);
 
   return 0;
 }
