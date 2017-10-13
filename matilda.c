@@ -219,7 +219,7 @@ QUEUE *convertToPostfix(QUEUE *queue) {
         char topStack = *getSTRING(peekSTACK(stack));
         while (topStack != '(') {
           enqueue(postFixQueue, peekSTACK(stack));
-          //printf("%c ", topStack);
+
           if (sizeSTACK(stack) == 0) break;
           pop(stack);
           topStack = *getSTRING(peekSTACK(stack));
@@ -232,7 +232,7 @@ QUEUE *convertToPostfix(QUEUE *queue) {
         char topStack = *getSTRING(peekSTACK(stack));
         while (priorityOf(c) <= priorityOf(topStack) && topStack != '(') {
           enqueue(postFixQueue, peekSTACK(stack));
-          //printf("%c ", topStack);
+
           pop(stack);
           if (sizeSTACK(stack) == 0) break;
           topStack = *getSTRING(peekSTACK(stack));
@@ -244,13 +244,10 @@ QUEUE *convertToPostfix(QUEUE *queue) {
   }
 
   while (sizeSTACK(stack) > 0) {
-    //char topStack = *getSTRING(peekSTACK(stack));
     enqueue(postFixQueue, peekSTACK(stack));
-    //printf("%c ", topStack);
     pop(stack);
   }
 
-  //printf("\n");
   return postFixQueue;
 }
 
@@ -293,34 +290,38 @@ char *processPostFix(QUEUE *queue, BST *tree) {
     char c = *str;
 
     if (isalnum(c)) push(stack, dequeue(queue));
-    else if (strlen(str) > 0 && str[0] == '-') push(stack, dequeue(queue));
+    else if (strlen(str) > 1 && str[0] == '-') push(stack, dequeue(queue));
     else {
       if (sizeSTACK(stack) > 0) {
         elem1 = getSTRING(pop(stack));
         c1 = *elem1;
         if (isalpha(c1)) {
-          //find the value of c in the bst and set = to value
+          /* find the value of c in the bst and set = to value */
           REAL *r = findBST(tree, newSTRING(elem1));
           value1 = getREAL(r);
         }
         else {
-          value1 = atof(elem1);
+          if (elem1[0] == '-' && strlen(elem1) > 1) value1 = atof(elem1);
+          else value1 = atof(elem1);
         }
       }
       if (sizeSTACK(stack) > 0) {
         elem2 = getSTRING(pop(stack));
         c2 = *elem2;
         if (isalpha(c2)) {
-          //find the value of c2 key in bst and set = to value
+          /* find the value of c2 key in bst and set = to value */
           REAL *r = findBST(tree, newSTRING(elem2));
           value2 = getREAL(r);
 
         }
         else {
-          value2 = atof(elem2);
+          if (elem2[0] == '-' && strlen(elem2) > 1) value2 = atof(elem2);
+          else value2 = atof(elem2);
         }
       }
-      push(stack, evaluate(value1, value2, c));
+
+      STRING *eval = evaluate(value1, value2, c);
+      push(stack, eval);
       dequeue(queue);
     }
   }
