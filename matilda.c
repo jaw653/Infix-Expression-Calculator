@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
   /* If any of the commands are -v, print and exit */
   int i;
   for (i = 0; i < argc; i++) {
-    if (strcmp(argv[i], "-v") == 0) { printf("Jake Wachs\n"); return 0; }
+    if (strcmp(argv[i], "-v") == 0) { printf("Jacob A. Wachs\n"); return 0; }
   }
 
 
