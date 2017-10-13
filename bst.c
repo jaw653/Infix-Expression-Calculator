@@ -39,6 +39,8 @@ struct BST {
 /******************** Private functions ********************/
 static void *insertBSTHelper(struct node *root, BST *tree, void *key, void *value) {
     if (root == NULL) {
+      assert(sizeof(struct node));
+      
       root = (struct node *)malloc(sizeof(struct node));
       root->key = key;
       root->value = value;
@@ -71,9 +73,9 @@ static void *findBSTHelper(struct node *root, BST *tree, void *key) {
 }
 
 static void printInOrderTree(FILE *fp, struct node *root, void (*display)(FILE *, void *, void *)) {
-  printf("output tree\n");
+  //printf("output tree\n");
   if (root->left) {
-    printInOrderTree(fp, root->left, display);
+    fprintf(fp, root->left);
     fprintf(fp, " ");
   }
 
@@ -106,6 +108,8 @@ static void printInOrderTree(FILE *fp, struct node *root, void (*display)(FILE *
 
 /************************* Public functions *************************/
 BST *newBST(void (*display)(FILE *,void *,void *),int (*comparator)(void *,void *)) {
+  assert(sizeof(BST) != 0);
+
   BST *tree = malloc( sizeof(BST) );
 
   tree->root = NULL;
