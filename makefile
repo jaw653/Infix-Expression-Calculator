@@ -6,13 +6,14 @@ OPTS = -Wall -Wextra -std=c99
 TYPE_OBJS = integer.o real.o string.o char.o
 UTIL_OBJS = scanner.o
 STRUCT_OBJS = da.o cda.o stack.o queue.o bst.o
-TESTOBJS = test-bst.o
+TESTOBJS = test-bst.o test-matilda.o
 TESTEXES = testBST matilda ./a.out
 
 all: $(TYPE_OBJS) $(UTIL_OBJS) $(STRUCT_OBJS) matilda.o
 
 test: $(TYPE_OBJS) $(UTIL_OBJS) $(STRUCT_OBJS) matilda.o $(TESTOBJS)
 	./testBST
+	matilda -i -p -b file3
 
 matilda.o: matilda.c $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS)
 	gcc $(OPTS) matilda.c -lm $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS) -o matilda
@@ -53,5 +54,8 @@ clean:
 #******************************************************************************#
 # *** TEST OBJECTS *** #
 #******************************************************************************#
-test-bst.o: bst.c bst.h bst.o
+test-bst.o: bst.o
 	gcc $(OPTS) testBST.c scanner.o real.o string.o bst.o -lm -o testBST
+
+test-matilda.o: matilda.o
+	gcc $(OPTS) matilda.c -lm $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS) -o matilda
