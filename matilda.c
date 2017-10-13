@@ -304,9 +304,7 @@ char *processPostFix(QUEUE *queue, BST *tree) {
           value1 = getREAL(r);
         }
         else {
-//printf("elem1 is: %s\n", elem1);
-          if (elem1[0] == '-' && strlen(elem1) > 1) value1 = atof(elem1);
-          else value1 = atof(elem1);
+          value1 = atof(elem1);
         }
       }
       if (sizeSTACK(stack) > 0) {
@@ -319,9 +317,7 @@ char *processPostFix(QUEUE *queue, BST *tree) {
 
         }
         else {
-//printf("elem2 is %s\n", elem2);
-          if (elem2[0] == '-' && strlen(elem2) > 1) value2 = atof(elem2);
-          else value2 = atof(elem2);
+          value2 = atof(elem2);
         }
       }
       push(stack, evaluate(value1, value2, c));
