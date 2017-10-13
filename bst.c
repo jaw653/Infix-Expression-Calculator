@@ -78,62 +78,16 @@ static void printInOrderTree(FILE *fp, struct node *root, BST *tree) {
     return;
   }
   else {
-    if (root->left) {
-      printf("[");
-      tree->display(fp, root->left->key, root->left->value);
-      printf("] ");
-      //printInOrderTree(fp, root->left, tree);
-    }
+    printf("[");
+    if (root->left) printInOrderTree(fp, root->left, tree);
 
-    printInOrderTree(fp, root->left, tree);
+    if (root->left) printf(" ");
+    tree->display(fp, root->key, root->value);
+    if (root->right) { printf(" "); }
 
-    if (root->right) {
-      printf("[");
-      tree->display(fp, root->right->key, root->right->value);
-      printf("]");
-    }
-
-/*
-  //  display(fp, root->key, root->value);
-    if (root->left) {
-      printf("[");
-    }
-
-    printInOrderTree(fp, root->left, display);
-
-    if (root->left) {
-      printf("] ");
-    }
-
-    display(fp, root->key, root->value);
-
-    if (root->right) {
-      printf(" [");
-    }
-
-    printInOrderTree(fp, root->right, display);
-
-    if (root->right) {
-      printf("]");
-    }
-*/
+    if (root->right) printInOrderTree(fp, root->right, tree);
+    printf("]");
   }
-
-
-
-/*******************************************************************/
-/*
-  if (root == NULL) { return; }
-
-  printInOrderTree(fp, root->left, display);
-
-  fprintf(fp, "[");
-  display(fp, root->key, root->value);
-  fprintf(fp, "]");
-
-  printInOrderTree(fp, root->right, display);
-*/
-/*******************************************************************/
 }
 
 
