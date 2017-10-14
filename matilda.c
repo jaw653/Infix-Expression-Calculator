@@ -27,24 +27,21 @@
 #include "real.h"
 #include "scanner.h"
 
-/*
- * Notes:
- *       When you're inserting values into BST, you need to input the value as a real...
- *
- */
 
 /***** Private functions *****/
-static void readInFile(FILE *, QUEUE *);    //Reads in file to queue
+static void readInFile(FILE *, QUEUE *);        //Reads in file to queue
 static int priorityOf(char c);
 
 /***** Public functions *****/
-void populateBST(FILE *, BST *);              //Sends only key/val pairs to bst
-void printInput(QUEUE *);                     //Prints out input (-i option)
+void populateBST(FILE *, BST *);                //Sends only key/val pairs to bst
+void printInput(QUEUE *);                       //Prints out input (-i option)
 QUEUE *convertToPostfix(QUEUE *);
-QUEUE *getLastLine(QUEUE *);                  //Returns queue containing last line
+QUEUE *getLastLine(QUEUE *);                    //Returns queue containing last line
 char *processPostFix(QUEUE *queue, BST *tree);  //Calculate final postfix number
 void displayPair(FILE *, void *, void *);
 STRING *evaluate(double, double, char);
+
+
 
 /******************************************************************************/
 /*                                ---MAIN---                                  */
@@ -60,10 +57,9 @@ int main(int argc, char *argv[]) {
   /* If matilda comes w/ no arguments (filenames or opts) */
   if (argc == 1) { return 0; }
 
+  /* Initialize new BST and populate it with all key/value pairs */
   char *name = argv[argc - 1];
   FILE *fp1 = fopen(name, "r");
-
-  /* Initialize new BST and populate it with all key/value pairs */
   BST *tree = newBST(displayPair, compareSTRING);
   populateBST(fp1, tree);
 
@@ -72,27 +68,32 @@ int main(int argc, char *argv[]) {
   /* Else run through and complete all command line opts */
   for (i = 0; i < argc; i++) {
     if (strcmp(argv[i], "-b") == 0) {
+
       char *filename = argv[argc - 1];
       FILE *fp = fopen(filename, "r");
 
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
+
       displayBST(stdout, tree);
       printf("\n");
 
       if (fp != NULL) fclose(fp);
     }
     else if (strcmp(argv[i], "-i") == 0) {
+
       char *filename = argv[argc - 1];
       FILE *fp = fopen(filename, "r");
 
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
+
       printInput(queue);
 
       if (fp != NULL) fclose(fp);
     }
     else if (strcmp(argv[i], "-p") == 0) {
+
       char *filename = argv[argc - 1];
       FILE *fp = fopen(filename, "r");
 
@@ -147,13 +148,14 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 /******************************************************************************/
+/*                              --END MAIN--                                  */
 /******************************************************************************/
+
 
 /*************** Private functions ***************/
 static void readInFile(FILE *fp, QUEUE *queue) {
   char *str = readToken(fp);
 
-  /* While there's still more to read in the file */
   while (str) {
     enqueue(queue, newSTRING(str));
     str = readToken(fp);
@@ -201,13 +203,12 @@ void populateBST(FILE *fp, BST *tree) {
 }
 
 void printInput(QUEUE *queue) {
-  //print each token in the queue, printing newlines after ';'
   int i;
   int size = sizeQUEUE(queue);
+
   for (i = 0; i < size; i++) {
     STRING *x;
 
-    //FIXME: possibly should be display real...tf, do I have to convert string to real?
     if (sizeQUEUE(queue) > 0) {
       x = dequeue(queue);
       displaySTRING(stdout, x);
@@ -216,9 +217,6 @@ void printInput(QUEUE *queue) {
     if (strcmp(getSTRING(x), ";") == 0) printf("\n");
     else { printf(" "); }
   }
-
-  //FIXME: should this newline be here?
-//  printf("\n");
 }
 
 QUEUE *convertToPostfix(QUEUE *queue) {
@@ -356,8 +354,6 @@ char *processPostFix(QUEUE *queue, BST *tree) {
 
   /* Pop and return final value */
   return getSTRING(pop(stack));
-
-
 }
 
 void displayPair(FILE *fp, void *key, void *value) {
