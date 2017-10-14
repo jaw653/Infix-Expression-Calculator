@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
       QUEUE *queue = newQUEUE(displaySTRING);
       readInFile(fp, queue);
       displayBST(stdout, tree);
+      printf("\n");
 
       if (fp != NULL) fclose(fp);
     }
