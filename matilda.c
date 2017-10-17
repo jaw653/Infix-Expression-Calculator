@@ -6,12 +6,6 @@
  * Infix Expression Calculator
  */
 
-//Question: might have to change some logic. the first else if might have to be altered bc maybe argv2 could be (incorrectly a file name)?
-//Question: where should I define my comparator and display fcs? Cause Lusth said he'll be using different comparators but the BST takes a comparator as one of its params...
-//Question: can -v be paired with other flags? right now if it came after another flag output might be wrong
-//Question: where/how to make display and comparator if Lusth is gonna use his own too?
-//Question: going to need to get all the way to last line before doing the postfix conversion
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -231,6 +225,7 @@ QUEUE *convertToPostfix(QUEUE *queue) {
     c = *s;
 
     if (isalnum(c)) enqueue(postFixQueue, newSTRING(s));
+    else if (strlen(s) > 1 && c == '-') enqueue(postFixQueue, newSTRING(s));
     else if (c == '(') { push(stack, newSTRING(s)); }
     else if (c == ')') {
       if (sizeSTACK(stack) > 0) {
