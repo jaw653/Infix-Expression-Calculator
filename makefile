@@ -3,19 +3,19 @@
 # The University of Alabama
 
 OPTS = -Wall -Wextra -std=c99
-TYPE_OBJS = integer.o real.o string.o char.o
+TYPE_OBJS = integer.o real.o string.o
 UTIL_OBJS = scanner.o
 STRUCT_OBJS = da.o cda.o stack.o queue.o bst.o
 TESTOBJS = test-bst.o test-matilda.o
 TESTEXES = testBST matilda ./a.out
 
-all: $(TYPE_OBJS) $(UTIL_OBJS) $(STRUCT_OBJS) matilda.o
+matilda: $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS)
 
-test: $(TYPE_OBJS) $(UTIL_OBJS) $(STRUCT_OBJS) matilda.o $(TESTOBJS)
+test: $(TYPE_OBJS) $(UTIL_OBJS) $(STRUCT_OBJS) $(TESTOBJS)
 	./testBST
 	matilda -i -p -b file3
 
-matilda.o: matilda.c $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS)
+matilda: matilda.c $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS)
 	gcc $(OPTS) matilda.c -lm $(TYPE_OBJS) $(STRUCT_OBJS) $(UTIL_OBJS) -o matilda
 
 bst.o: bst.c bst.h
@@ -23,9 +23,6 @@ bst.o: bst.c bst.h
 
 scanner.o: scanner.c scanner.h
 	gcc $(OPTS) -c scanner.c
-
-char.o: char.c char.h
-	gcc $(OPTS) -c char.c
 
 string.o: string.c string.h
 	gcc $(OPTS) -c string.c
