@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
 
       while (sizeQUEUE(postFixExpr) > 0) {
         displaySTRING(stdout, dequeue(postFixExpr));
-        printf(" ");
+        if (sizeQUEUE(postFixExpr) >= 1) printf(" ");
       }
       printf("\n");
 
@@ -196,6 +196,7 @@ void populateBST(FILE *fp, BST *tree) {
   }
 }
 
+/* I think the space printed at the end of this queue is printing the incorrect output!!! */
 void printInput(QUEUE *queue) {
   int i;
   int size = sizeQUEUE(queue);
