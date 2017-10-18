@@ -31,9 +31,9 @@ void populateBST(FILE *, BST *);                //Sends only key/val pairs to bs
 void printInput(QUEUE *);                       //Prints out input (-i option)
 QUEUE *convertToPostfix(QUEUE *);
 QUEUE *getLastLine(QUEUE *);                    //Returns queue containing last line
-char *processPostFix(QUEUE *queue, BST *tree);  //Calculate final postfix number
+double processPostFix(QUEUE *queue, BST *tree);  //Calculate final postfix number
 void displayPair(FILE *, void *, void *);
-STRING *evaluate(double, double, char);
+REAL *evaluate(double, double, char);
 
 
 
@@ -118,8 +118,8 @@ int main(int argc, char *argv[]) {
 
   /* Calculate final postfix number and print it */
   if (sizeQUEUE(postExpr) > 1) {
-    char *finalVal = processPostFix(postExpr, tree);
-    printf("%s\n", finalVal);
+    double finalVal = processPostFix(postExpr, tree);
+    printf("%lf\n", finalVal);
   }
   else {
     char *string = getSTRING(peekQUEUE(postExpr));
@@ -291,65 +291,47 @@ QUEUE *getLastLine(QUEUE *queue) {
   return lastLine;
 }
 
-char *processPostFix(QUEUE *queue, BST *tree) {
-  STACK *stack = newSTACK(displaySTRING);
+double processPostFix(QUEUE *queue, BST *tree) {
+  STACK *stack = newSTACK(displayREAL);
 
-  char *elem1;
-  char *elem2;
-  char c1, c2;
   double value1, value2;
 
   while (sizeQUEUE(queue) > 0) {
     char *str = getSTRING(peekQUEUE(queue));
     char c = *str;
 
-    if (isalnum(c)) push(stack, dequeue(queue));
-    else if (strlen(str) > 1 && str[0] == '-') push(stack, dequeue(queue));
+    if (isalnum(c)) {
+      if (isalpha(c)) {
+        REAL *r = findBST(tree, newSTRING(str));
+        push(stack, r);
+      }
+      else {
+        REAL *r = newREAL(atof(str));
+        push(stack, r);
+      }
+      dequeue(queue);
+    }
+    else if (strlen(str) > 1 && str[0] == '-') {
+      char *pushString = getSTRING(dequeue(queue));
+      REAL *r = newREAL(atof(pushString));
+      push(stack, r);
+    }
     else {
       if (sizeSTACK(stack) > 0) {
-        elem1 = getSTRING(pop(stack));
-        c1 = *elem1;
-        if (isalpha(c1)) {
-          /* find the value of c in the bst and set = to value */
-          REAL *r = findBST(tree, newSTRING(elem1));
-          if (r == NULL) {
-            printf("variable %s was not declared\n", elem1);
-            exit(0);
-          }
-          value1 = getREAL(r);
-        }
-        else {
-          if (elem1[0] == '-' && strlen(elem1) > 1) value1 = atof(elem1);
-          else value1 = atof(elem1);
-        }
+        value1 = getREAL(pop(stack));
       }
       if (sizeSTACK(stack) > 0) {
-        elem2 = getSTRING(pop(stack));
-        c2 = *elem2;
-        if (isalpha(c2)) {
-          /* find the value of c2 key in bst and set = to value */
-          REAL *r = findBST(tree, newSTRING(elem2));
-          if (r == NULL) {
-            printf("variable %s was not declared\n", elem2);
-            exit(0);
-          }
-          value2 = getREAL(r);
-
-        }
-        else {
-          if (elem2[0] == '-' && strlen(elem2) > 1) value2 = atof(elem2);
-          else value2 = atof(elem2);
-        }
+        value2 = getREAL(pop(stack));
       }
 
-      STRING *eval = evaluate(value1, value2, c);
+      REAL *eval = evaluate(value1, value2, c);
       push(stack, eval);
       dequeue(queue);
     }
   }
 
   /* Pop and return final value */
-  return getSTRING(pop(stack));
+  return getREAL(pop(stack));
 }
 
 void displayPair(FILE *fp, void *key, void *value) {
@@ -358,9 +340,8 @@ void displayPair(FILE *fp, void *key, void *value) {
   displayREAL(fp, value);
 }
 
-STRING *evaluate(double a, double b, char c) {
+REAL *evaluate(double a, double b, char c) {
   double val;
-  char *str = malloc(sizeof(char *));
 
   switch (c) {
     case '+':
@@ -383,8 +364,5 @@ STRING *evaluate(double a, double b, char c) {
       break;
   }
 
-  sprintf(str, "%lf", val);
-  STRING *s = newSTRING(str);
-
-  return s;
+  return newREAL(val);
 }
