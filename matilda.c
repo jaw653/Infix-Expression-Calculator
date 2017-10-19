@@ -225,9 +225,10 @@ QUEUE *convertToPostfix(QUEUE *queue) {
     s = getSTRING(dequeue(queue));
     c = *s;
 
-    if (isalnum(c)) enqueue(postFixQueue, newSTRING(s));
-    else if (strlen(s) > 1 && c == '-') enqueue(postFixQueue, newSTRING(s));
-    else if (c == '(') { push(stack, newSTRING(s)); }
+    if (isalnum(c)) { enqueue(postFixQueue, newSTRING(s)); }
+    else if (strlen(s) > 1 && c == '-') { enqueue(postFixQueue, newSTRING(s)); }
+    else if (strlen(s) > 1 && c == '.') { enqueue(postFixQueue, newSTRING(s)); }
+    else if (c == '(') { printf("push %s\n", s); push(stack, newSTRING(s)); }
     else if (c == ')') {
       if (sizeSTACK(stack) > 0) {
         char topStack = *getSTRING(peekSTACK(stack));
@@ -312,6 +313,11 @@ double processPostFix(QUEUE *queue, BST *tree) {
       dequeue(queue);
     }
     else if (strlen(str) > 1 && str[0] == '-') {
+      char *pushString = getSTRING(dequeue(queue));
+      REAL *r = newREAL(atof(pushString));
+      push(stack, r);
+    }
+    else if (strlen(str) > 1 && str[0] == '.') {
       char *pushString = getSTRING(dequeue(queue));
       REAL *r = newREAL(atof(pushString));
       push(stack, r);
