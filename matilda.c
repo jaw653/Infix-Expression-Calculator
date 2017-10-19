@@ -228,7 +228,7 @@ QUEUE *convertToPostfix(QUEUE *queue) {
     if (isalnum(c)) { enqueue(postFixQueue, newSTRING(s)); }
     else if (strlen(s) > 1 && c == '-') { enqueue(postFixQueue, newSTRING(s)); }
     else if (strlen(s) > 1 && c == '.') { enqueue(postFixQueue, newSTRING(s)); }
-    else if (c == '(') { printf("push %s\n", s); push(stack, newSTRING(s)); }
+    else if (c == '(') { push(stack, newSTRING(s)); }
     else if (c == ')') {
       if (sizeSTACK(stack) > 0) {
         char topStack = *getSTRING(peekSTACK(stack));
