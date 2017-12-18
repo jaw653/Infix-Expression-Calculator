@@ -304,6 +304,10 @@ double processPostFix(QUEUE *queue, BST *tree) {
     if (isalnum(c)) {
       if (isalpha(c)) {
         REAL *r = findBST(tree, newSTRING(str));
+        if (r == NULL) {
+          printf("variable %s was not declared\n", str);
+          exit(0);
+        }
         push(stack, r);
       }
       else {

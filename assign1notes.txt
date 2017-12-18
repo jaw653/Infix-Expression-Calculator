@@ -1,0 +1,21 @@
+-when i want to display them, i want to display the key AND the value
+-don't need a class that joins the pair together, just need a function that displays both the key and value
+-compareSTRING is how do i compare two strings to say that one is less than the other
+-comparators return 0 if the values are the same
+-"i will be using different comparators when testing" (must also use in stack and queue and da and cda)
+-comparator returns negative number if the first thing is considered less than the second thing
+  -on the above note, if you check specifically for -1 or 1, your program will fail
+-use the comparator to decide where you're gonna put the given key/value pair in the bst
+-in this project, you will only have to do insert and find ... q: does this mean no build or delete?
+-in order to insert the entire given array, use the following:
+  (int)(sizeof(array) / sizeof(int))  -->   this allows us to find the number of elements in a given integer array (should be able to use the same method with other types)
+-may be helpful to write some code that runs through an in-order traversal in order to help make sure your code is correct
+-take in a bunch of variable definitions and an expression and you care going to compute the value of that expression
+  -you are going to take an in-fix impression and then you are going to translate it to post-fix impression
+-input will be read in as a queue of strings
+-processing/post-fix you will need a stack
+-"keep everything as string until you're ready to process that final expression"
+-bst is used to store variable values
+-i want you to store those variable values in a bst
+-if your variable names are randomly assigned, you will get a decently balanced tree. if data comes in random, you don't need to self balance
+  -one of the options to your program is to print out the tree storing your variable names

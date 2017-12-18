@@ -1,0 +1,25 @@
+Notes:
+------
+-do we need to account for a completely empty file?
+-for makefile, test still recompiles. need to fix?
+-note that if an issue is fixed, that doesn't include whitespace. still
+	need to fix whitespace
+-make sure that NO whitespace is printed after bst in matilda or bst.c [x]
+-just need to double check anywhere -opts are printed to make sure there's
+	no trailing whitespace
+
+Questions to ask Lusth:
+-------------------------
+-for #26-30, I have the exact same postfix but my output number is like 
+	decimals off. Do you have any idea why?
+Tests failed ([x] - fixed):
+---------------------------
+#14 - makefile issue. recompiling when it shouldn't be "make; make"[x]
+#18 - problem w/ negatives. fixed (minus whitespace?) yourcode-0-2 [x]
+#19 - whitespace??? yourcode-0-3 [x]
+#20 - problem w/ negatives. fixed (minus whitespace?) yourcode-0-4 [x]
+#21 - problem w/ negatives. fixed (minus whitespace?) yourcode-0-5 [x]
+#22 - whitespace??? yourcode-0-6 [x - whitespace fix should fix]
+#23 - whitespace??? yourcode-0-7 [x - same as above]
+#25 - problem w/ negatives. fixed (minus whitespace?) yourcode-0-9 [x]
+#26->30 - segfault. check to see if fixing negatives fixed this. [x]
