@@ -6,13 +6,11 @@ Used previously created dynamic structure "classes" such as stack, queue, dynami
 
 All files needed to utilize this project are found in the repository and can be used as shown below.
 
-Command Line examples:
-~$ make
-~$ ./trees -g assign2Tests/trees.0 assign2Tests/trees.1 outputs/1
-(the above will throw items in trees.0 found in trees.1 into a Green Tree Structure, writing the GT into outputs/1)
-~$ ./trees -r assign2Tests/trees.0 assign2Tests/trees.1 outputs/1
-(will do the same as the first command, but will use throw items into Red-Black Tree instead)
-~$ make test
-(runs program on plethora of tests and uses diff command w/ previously known correct outputs to check correctness)
-~$ make clean
-(cleans directory of executables for full recompilation)
+Command Line examples:</br>
+~$ make</br>
+~$ ./matilda -i -p -b file</br>
+</t>(takes the infix expression from 'file' and converts to postfix. -i prints input from 'file', -p prints postfix, -b prints binary tree used for storing equation)</br>
+~$ make test</br>
+</t>(runs program on plethora of tests and uses diff command w/ previously known correct outputs to check correctness)</br>
+~$ make clean</br>
+</t>(cleans directory of executables for full recompilation)
